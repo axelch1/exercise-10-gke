@@ -14,10 +14,14 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
       - uses: actions/setup-python@v5
         with:
           python-version: "3.14"
       - run: pip install pytest requests pyyaml
+      - run: terraform fmt -check -recursive || true
       - run: pytest tests/ -v --tb=short
 
       - name: Trigger grader
